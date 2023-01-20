@@ -15,12 +15,8 @@ import * as Animatable from 'react-native-animatable'
 import LinearGradient from 'react-native-linear-gradient';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import users from "./users";
 import { AuthContext } from "../components/Context";
-
-// import { HttpHelper } from "../helpers/HttpHelper";
-
-// import Users from '../model/Users';
 
 const SignInScreen = ({ navigation }) => {
 
@@ -34,10 +30,7 @@ const SignInScreen = ({ navigation }) => {
         isValidPassword: true,
     });
 
-    
-
-
-   // const { signIn } = React.useContext(AuthContext);
+    const { signIn } = React.useContext(AuthContext);
 
     const textInputChange = (val) => {
         if (val.trim().length >= 30) {
@@ -90,88 +83,32 @@ const SignInScreen = ({ navigation }) => {
         } else {
             setData({
                 ...data,
-                isValidUser: false
+                isValidUser: false  
             });
         }
     }
 
-    const loginHandle = (username, password) => {
+    const loginHandle = (userName, password) => {
 
-        //  signIn(username,password);
-
-        { /*let bodyParam = {}
-    var loginResponse = HttpHelper("https://kavasamkonnect.com/api/user/login","POST",)  */}
-
-        {  /* const foundUser = Users.filter( item => {
+        const foundUser = users.filter( item => {
             return userName == item.username && password == item.password;
-        });
-        
+        } );
+
         if ( data.username.length == 0 || data.password.length == 0 ) {
             Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
                 {text: 'Okay'}
             ]);
             return;
         }
-        if(foundUser.length == 0) {
-            Alert.alert('Invalid User!', 'UserName or Password is incorrect.' ,[
+
+        if ( foundUser.length == 0 ) {
+            Alert.alert('Invalid User!', 'Username or password is incorrect.', [
                 {text: 'Okay'}
             ]);
             return;
         }
-    signIn(foundUser)
-    }  */}
-
-
-        fetch('https://kavasamkonnect.com/api/user/login', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            })
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                setData({
-                    isValidUser: true,
-                    isValidPassword: true,
-                }, () => {
-
-                    if (response.token != undefined) {
-                        console.log(response);
-                       { /*AsyncStorage.setItem('tokenUser', response.token);
-                        AsyncStorage.setItem('statusUser', response.status);
-                        AsyncStorage.setItem('password', response.password);
-                        AsyncStorage.setItem('Username', response.username);
-                        const resetAction = NavigationActions.reset({
-                            index: 0,
-                            actions: [
-                                NavigationActions.navigate('HomeScreen')
-                            ]
-                        }) */}
-
-                        //dispatch({ type: 'LOGIN', id: username, token: userToken });
-                    } else {
-
-
-                        //this.setState({ spinner: false });
-                    {   /* setTimeout(() => {
-                            Alert.alert('Warning', 'Username / Password ');
-                        }, 100); */}
-
-                    }
-                             
-                })
-            }).catch((error)=>{
-                console.log(error);
-            });
-    
-
-}
+        signIn(foundUser);
+    }
 
 
 return (
@@ -264,8 +201,8 @@ return (
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                   // onPress={() => { loginHandle(data.username, data.password) }}
-                   onPress = {() => navigation.navigate('HomeScreen')}
+                    onPress={() => {loginHandle( data.username, data.password )}}
+                   //onPress = {() => navigation.navigate('HomeScreen')}
                 >
                     <LinearGradient
                         colors={['#08d4c4', '#01ab9d']}
